@@ -154,4 +154,683 @@ body{
   margin-top:10px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden
 }
 .cal-header{
-  display:flex;justify-content:space-between;align-items:center;background:#0f172a;color:#fff;padding:10px 12px;flex
+  display:flex;justify-content:space-between;align-items:center;background:#0f172a;color:#fff;padding:10px 12px;flex-wrap:wrap;gap:8px
+}
+.cal-title{font-weight:800}
+.cal-legend{display:flex;gap:10px;flex-wrap:wrap}
+.legend-dot{display:inline-flex;align-items:center;gap:6px;font-size:12px}
+.legend-dot i{display:inline-block;width:10px;height:10px;border-radius:999px}
+.i-erik{background:var(--brand-green)}
+.i-devin{background:var(--brand-orange)}
+.i-qa{background:var(--blue)}
+.i-milestone{background:#7c3aed}
+.cal-grid{
+  display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid #e5e7eb
+}
+.cal-dayname,.cal-cell{
+  padding:10px;border-right:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;min-height:64px
+}
+.cal-dayname{background:#f8fafc;font-weight:700;font-size:12px;color:#334155;min-height:auto}
+.cal-cell{position:relative;background:#ffffff}
+.cal-cell.muted{background:#fafaf9;color:#9ca3af}
+.cal-date{position:absolute;top:8px;left:8px;font-size:12px;font-weight:700;color:#334155}
+.cal-dots{position:absolute;right:8px;bottom:8px;display:flex;gap:4px;flex-wrap:wrap}
+.cal-dots span{width:8px;height:8px;border-radius:999px}
+.cal-has{outline:2px solid rgba(22,163,74,.15);outline-offset:-2px;border-radius:8px}
+.cal-pop{
+  position:absolute;left:8px;right:8px;bottom:28px;background:#111827;color:#fff;font-size:12px;padding:6px 8px;border-radius:8px;
+  display:none;box-shadow:0 8px 16px rgba(0,0,0,.25)
+}
+.cal-cell:hover .cal-pop{display:block}
+
+/* Mobile calendar cells */
+@media (max-width: 900px){
+  .cal-dayname,.cal-cell{min-height:54px;padding:8px}
+  .cal-dots span{width:7px;height:7px}
+}
+@media (max-width: 480px){
+  .cal-dayname,.cal-cell{min-height:48px;padding:6px}
+}
+
+/* small helper */
+.badge{display:inline-block;padding:2px 6px;border-radius:999px;font-size:11px;color:#fff}
+.badge.erik{background:var(--brand-green)} .badge.devin{background:var(--brand-orange)}
+.badge.qa{background:var(--blue)} .badge.milestone{background:#7c3aed}
+
+/* Role glance chart */
+.role-box{margin-top:12px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden}
+.role-hdr{display:flex;justify-content:space-between;align-items:center;background:#0b1220;color:#fff;padding:10px 12px;flex-wrap:wrap;gap:8px}
+.role-hdr .title{font-weight:800}
+.kpi{display:flex;gap:8px;flex-wrap:wrap}
+.kpi .pill{background:#111827;color:#fff;border:1px solid rgba(255,255,255,.15);padding:4px 8px;border-radius:999px;font-size:12px}
+.kpi .pill.erik{background:var(--brand-green)} .kpi .pill.devin{background:var(--brand-orange)} .kpi .pill.qa{background:var(--blue)} .kpi .pill.milestone{background:#7c3aed}
+.role-chart{padding:12px 14px}
+#role-svg{width:100%;height:260px}
+.role-legend{display:flex;gap:12px;font-size:12px;color:#374151;align-items:center;padding:0 14px 12px}
+.role-legend .dot{width:10px;height:10px;border-radius:999px;display:inline-block;margin-right:6px}
+</style>
+</head>
+
+<body>
+<button class="print-button" onclick="window.print()">📄 Cetak PDF</button>
+
+<!-- ================= PAGE 1 ================= -->
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <!-- GANTI src DI BAWAH DENGAN LOGO KAMU (contoh: images/logo.png atau data:image/png;base64,...) -->
+    <div class="logo"><img src="logo-ebuyur.png" alt="E-Buyur Logo"/></div>
+    <h1>E-BUYUR PROJECT ROADMAP</h1>
+    <div class="subtitle">Marketplace Sayuran Segar • Laravel + Flutter + TFLite • Hypercloud</div>
+    <div class="date-range">📅 September 2025 → Presentasi Awal Oktober</div>
+  </div>
+
+  <!-- DoD -->
+  <div class="section no-break">
+    <h2 class="section-title"><span class="section-icon">🎯</span>Definition of Done (Target Presentasi)</h2>
+    <div class="dod-box">
+      <div class="dod-title">Sasaran Akhir – “Siap Demo Awal Oktober”</div>
+      <ul class="dod-list">
+        <li>Backend Laravel hosted di Hypercloud (domain aktif + HTTPS Let’s Encrypt), <em>APP_URL</em> benar.</li>
+        <li>Database migrasi berjalan; backup harian otomatis + verifikasi pemulihan.</li>
+        <li>Aplikasi Flutter (buyer & seller) terhubung ke server online (base URL via <code>--dart-define</code>).</li>
+        <li>Login/register/role buyer–seller selesai; routing dashboard sesuai role.</li>
+        <li>Integrasi ML TFLite on-device: klasifikasi jenis (softmax) + % kelayakan (sigmoid). Threshold default 70% (admin dapat kalibrasi 65–80%).</li>
+        <li>Batch Scan (prioritas): scan beruntun → simpan draf lokal → post massal (commit).</li>
+        <li>Perbaikan inti: gambar produk tampil (Storage::url, symlink), cart & favorites per-user (limit 100), pencarian buyer global & seller scoped, “Kelola Produk/Toko” ter-scope seller.</li>
+        <li>Stabil: session DB (SESSION_DRIVER=database) + Sanctum + CORS (stateful domains) berfungsi.</li>
+        <li>QA dasar untuk alur utama (browse → cart/fav → checkout dummy; batch scan → commit).</li>
+        <li>Dokumentasi & materi presentasi: arsitektur, data flow ML, demo path (rekaman), runbook deploy & recovery.</li>
+      </ul>
+      <div class="small-note">Catatan: hardening dasar (APP_KEY, rate limit login, exception logging) aktif.</div>
+    </div>
+  </div>
+
+  <!-- Kalender Jadwal -->
+  <div class="section no-break">
+    <h2 class="section-title"><span class="section-icon">📆</span>Kalender Jadwal — September 2025</h2>
+    <div class="calendar">
+      <div class="cal-header">
+        <div class="cal-title">September 2025</div>
+        <div class="cal-legend">
+          <span class="legend-dot"><i class="i-erik"></i> Erik</span>
+          <span class="legend-dot"><i class="i-devin"></i> Devin</span>
+          <span class="legend-dot"><i class="i-qa"></i> QA/UAT</span>
+          <span class="legend-dot"><i class="i-milestone"></i> Milestone</span>
+        </div>
+      </div>
+      <div id="cal-grid" class="cal-grid"></div>
+    </div>
+    <div class="small-note" style="margin-top:8px">
+      Tip: Arahkan kursor/ketuk tanggal untuk melihat detail tugas. Warna/titik menunjukkan penanggung jawab.
+    </div>
+
+    <!-- Kilas Peran (Grafik) -->
+    <div class="role-box">
+      <div class="role-hdr">
+        <div class="title">Kilas Peran (Mingguan)</div>
+        <div id="kpi" class="kpi"></div>
+      </div>
+      <div class="role-chart">
+        <svg id="role-svg" viewBox="0 0 800 260" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+      <div class="role-legend">
+        <span><span class="dot" style="background:var(--brand-green)"></span>Erik</span>
+        <span><span class="dot" style="background:var(--brand-orange)"></span>Devin</span>
+        <span><span class="dot" style="background:var(--blue)"></span>QA/UAT</span>
+        <span><span class="dot" style="background:#7c3aed"></span>Milestone</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline (rinci) -->
+  <div class="section">
+    <h2 class="section-title"><span class="section-icon">📅</span>Timeline September 2025</h2>
+
+    <!-- WEEK 1 -->
+    <div class="timeline">
+      <div class="week no-break">
+        <div class="week-header">
+          <span class="week-title">Minggu 1 — 1–7 Sep • Stabilisasi & Fondasi Hosting</span>
+          <span class="week-dates">1–7 Sep</span>
+        </div>
+        <div class="week-content">
+          <div class="week-objective"><strong>Tujuan:</strong> fondasi beres & server siap—aplikasi stabil dasar.</div>
+          <div class="task-grid">
+            <div class="task-column">
+              <div class="task-owner">👨‍💻 Erik — 1–2 Sep</div>
+              <ul class="task-list">
+                <li>Gambar produk: gunakan <code>Storage::url()</code>, jalankan <code>php artisan storage:link</code>.</li>
+                <li>Session ke DB: <code>SESSION_DRIVER=database</code> + <code>php artisan session:table</code> + migrate.</li>
+                <li>Sanctum & CORS: <code>SANCTUM_STATEFUL_DOMAINS</code> (localhost, 127.0.0.1, 192.168.1.*), <code>SESSION_DOMAIN=null</code>.</li>
+                <li>Hardening: set <code>APP_KEY</code>, rate limit login, aktifkan logging exception.</li>
+              </ul>
+              <div class="ac-title">Acceptance</div>
+              <ul class="ac-list">
+                <li>Gambar tampil di listing & detail.</li>
+                <li>Session persist via DB; multi-tab aman.</li>
+                <li>Flutter web bisa auth via Sanctum (CORS OK).</li>
+              </ul>
+            </div>
+            <div class="task-column">
+              <div class="task-owner">👨‍💻 Devin — 1–2 Sep</div>
+              <ul class="task-list">
+                <li>Android konsisten: <code>applicationId</code> ↔ <code>AndroidManifest</code> ↔ <code>MainActivity.kt</code>.</li>
+                <li>Konfigurasi base URL via <code>--dart-define=API_BASE=...</code> (dev/staging/prod).</li>
+              </ul>
+              <div class="ac-title">Acceptance</div>
+              <ul class="ac-list">
+                <li>Build debug/release menggunakan endpoint yang benar.</li>
+                <li>Login → fetch katalog sukses di staging.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="task-grid" style="margin-top:12px">
+            <div class="task-column">
+              <div class="task-owner">👨‍💻 Erik — 3–4 Sep</div>
+              <ul class="task-list">
+                <li>Provision Hypercloud VM, UFW, SSH key.</li>
+                <li>Install Nginx + PHP-FPM + DB; Redis opsional.</li>
+                <li>CI/CD (GitHub Actions → deploy via SSH/rsync).</li>
+              </ul>
+            </div>
+            <div class="task-column">
+              <div class="task-owner">👨‍💻 Devin — 3–4 Sep</div>
+              <ul class="task-list">
+                <li>Cart per-user (limit 100).</li>
+                <li>Favorites per-user (limit 100).</li>
+                <li>Routing role: buyer vs seller dashboard.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="task-grid" style="margin-top:12px">
+            <div class="task-column">
+              <div class="task-owner">👨‍💻 Erik — 5 Sep</div>
+              <ul class="task-list">
+                <li>Domain + HTTPS (Let’s Encrypt), update <code>APP_URL</code>.</li>
+                <li>DB migrate & seed minimal.</li>
+              </ul>
+            </div>
+            <div class="task-column">
+              <div class="task-owner">👨‍💻 Devin — 5–6 Sep</div>
+              <ul class="task-list">
+                <li>“Kelola Produk/Toko” scope seller_id=auth.</li>
+                <li>Pencarian: buyer global, seller scoped.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="task-grid" style="margin-top:12px">
+            <div class="task-column" style="grid-column:1 / -1">
+              <div class="task-owner">👥 7 Sep — Smoke Test</div>
+              <ul class="task-list">
+                <li>End-to-end (web + Android fisik) & catat bug P0/P1.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="output-box"><strong>Output Minggu 1:</strong> server staging online, app stabil dasar, daftar bug prioritas tersusun.</div>
+        </div>
+      </div>
+
+      <!-- WEEK 2 -->
+      <div class="week no-break">
+        <div class="week-header">
+          <span class="week-title">Minggu 2 — 8–14 Sep • Integrasi ML + Batch Scan v1</span>
+          <span class="week-dates">8–14 Sep</span>
+        </div>
+        <div class="week-content">
+          <div class="week-objective"><strong>Tujuan:</strong> TFLite on-device aktif + batch scan draft → post.</div>
+          <div class="task-grid">
+            <div class="task-column">
+              <div class="task-owner">👨‍💻 Erik — 8–9 Sep</div>
+              <ul class="task-list">
+                <li>Endpoint admin: kalibrasi threshold (65–80%).</li>
+                <li>API metadata model (versi/updated_at/threshold).</li>
+              </ul>
+            </div>
+            <div class="task-column">
+              <div class="task-owner">👨‍💻 Devin — 8–10 Sep</div>
+              <ul class="task-list">
+                <li>Integrasi TFLite FP16; tampilkan label + probabilitas.</li>
+                <li>Badge “Layak” ≥ threshold; fallback error tips.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="task-grid" style="margin-top:12px">
+            <div class="task-column">
+              <div class="task-owner">👨‍💻 Devin — 10–12 Sep (Batch Scan v1)</div>
+              <ul class="task-list">
+                <li>Mode “Scan Beruntun” → draf lokal (gambar, label, %).</li>
+                <li>Tinjau draf → Commit massal.</li>
+              </ul>
+            </div>
+            <div class="task-column">
+              <div class="task-owner">👨‍💻 Erik — 11–12 Sep</div>
+              <ul class="task-list">
+                <li>API <code>/batch/drafts</code> (opsional) & <code>/batch/commit</code> + policy ownership.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="task-grid" style="margin-top:12px">
+            <div class="task-column" style="grid-column:1 / -1">
+              <div class="task-owner">👥 13–14 Sep — Uji Lapangan</div>
+              <ul class="task-list">
+                <li>Android + HTTPS; optimasi kamera & inferensi.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="output-box"><strong>Output Minggu 2:</strong> ML live + Batch Scan v1 siap dipakai seller.</div>
+        </div>
+      </div>
+
+      <!-- WEEK 3 -->
+      <div class="week no-break">
+        <div class="week-header">
+          <span class="week-title">Minggu 3 — 15–21 Sep • Offline Ringan, Audit Trail, Hardening</span>
+          <span class="week-dates">15–21 Sep</span>
+        </div>
+        <div class="week-content">
+          <div class="week-objective"><strong>Tujuan:</strong> nilai jual + keamanan & ketahanan.</div>
+          <div class="task-grid">
+            <div class="task-column">
+              <div class="task-owner">👨‍💻 Devin — 15–17 Sep (Offline Ringan)</div>
+              <ul class="task-list">
+                <li>Cache katalog 24 jam & local queue transaksi (retry).</li>
+                <li>UI indikator koneksi & sinkronisasi.</li>
+              </ul>
+            </div>
+            <div class="task-column">
+              <div class="task-owner">👨‍💻 Erik — 15–16 Sep (Audit Trail)</div>
+              <ul class="task-list">
+                <li>Tabel <code>product_audits</code> + halaman histori.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="task-grid" style="margin-top:12px">
+            <div class="task-column">
+              <div class="task-owner">👨‍💻 Erik — 18–19 Sep (Produksi)</div>
+              <ul class="task-list">
+                <li>Env prod, backup otomatis, monitoring.</li>
+              </ul>
+            </div>
+            <div class="task-column">
+              <div class="task-owner">👨‍💻 Devin — 18–19 Sep (UX/Perf)</div>
+              <ul class="task-list">
+                <li>Polish UI/UX; pagination; debounced search.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="task-grid" style="margin-top:12px">
+            <div class="task-column" style="grid-column:1 / -1">
+              <div class="task-owner">👥 20–21 Sep — UAT Siklus 1</div>
+              <ul class="task-list">
+                <li>Buyer: browse → cart → checkout dummy; Seller: batch scan → commit.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="output-box"><strong>Output Minggu 3:</strong> offline ringan & audit trail aktif, produksi siap, UAT-1 selesai.</div>
+        </div>
+      </div>
+
+      <!-- WEEK 4 -->
+      <div class="week no-break">
+        <div class="week-header">
+          <span class="week-title">Minggu 4 — 22–30 Sep • Stabilisasi Akhir, Dokumentasi, Dress Rehearsal</span>
+          <span class="week-dates">22–30 Sep</span>
+        </div>
+        <div class="week-content">
+          <div class="week-objective"><strong>Tujuan:</strong> feature freeze; fokus kualitas & materi presentasi.</div>
+          <div class="task-grid">
+            <div class="task-column">
+              <div class="task-owner">👨‍💻 Erik — 22–24 Sep</div>
+              <ul class="task-list">
+                <li>Rate limit, validasi, pagination, index DB; SOP recovery.</li>
+              </ul>
+            </div>
+            <div class="task-column">
+              <div class="task-owner">👨‍💻 Devin — 22–24 Sep</div>
+              <ul class="task-list">
+                <li>Polish Batch Scan: seleksi massal, hapus draf, progress commit; slider threshold (view).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="task-grid" style="margin-top:12px">
+            <div class="task-column">
+              <div class="task-owner">👥 25–27 Sep — UAT Siklus 2</div>
+              <ul class="task-list">
+                <li>Perf ringan; simulasi jaringan lemah & kamera.</li>
+              </ul>
+            </div>
+            <div class="task-column">
+              <div class="task-owner">👨‍💻 Erik & Devin — 28–30 Sep</div>
+              <ul class="task-list">
+                <li>Freeze kode v1.0 + changelog + runbook; materi presentasi & buffer P0.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="output-box"><strong>Output Minggu 4:</strong> rilis stabil v1.0 + dokumen lengkap + materi presentasi siap.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ================= PAGE 2 ================= -->
+<div class="container page-break">
+  <!-- Team -->
+  <div class="section no-break">
+    <h2 class="section-title"><span class="section-icon">👥</span>Pembagian Tanggung Jawab</h2>
+    <div class="team-grid">
+      <div class="team-member">
+        <div class="member-name">Erik</div>
+        <div class="member-role">Lead Backend • DevOps • ML Integration</div>
+        <ul class="responsibility-list">
+          <li>Laravel infra: storage (symlink), sessions (DB), Sanctum/CORS (stateful domains).</li>
+          <li>Hypercloud: provisioning, Nginx/PHP-FPM, domain+HTTPS, CI/CD, backup & monitoring.</li>
+          <li>API: batch commit, settings threshold, audit trail, pencarian buyer global/seller scoped.</li>
+          <li>Keamanan/kinerja: rate limit, pagination, indexing DB.</li>
+          <li>Dokumentasi backend: contoh <code>.env</code>, migrasi DB, runbook deploy, disaster recovery.</li>
+          <li>Materi presentasi: arsitektur, data flow ML, hasil uji.</li>
+        </ul>
+      </div>
+      <div class="team-member">
+        <div class="member-name">Devin</div>
+        <div class="member-role">Mobile/Web Flutter • UX</div>
+        <ul class="responsibility-list">
+          <li>Konsistensi package Android & base URL (<code>--dart-define</code>).</li>
+          <li>Cart/Favorites per-user (limit 100), buyer & seller dashboard.</li>
+          <li>Integrasi TFLite (load model, inferensi, UI hasil & threshold badge).</li>
+          <li>Batch Scan (scan beruntun → draf → commit), penyimpanan draf lokal.</li>
+          <li>Offline ringan (cache katalog + local queue), status koneksi & sinkronisasi.</li>
+          <li>Polishing UI/UX, skeleton/loading/error handling, performance list.</li>
+          <li>Materi presentasi: rekaman alur buyer & seller.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Priorities -->
+  <div class="section no-break">
+    <h2 class="section-title"><span class="section-icon">⭐</span>Prioritas Fitur</h2>
+    <div class="priority-list">
+      <div class="priority-item"><div class="priority-number">1</div><div class="priority-text"><strong>Batch Scan:</strong> fitur utama seller untuk scan massal → draf → commit.</div></div>
+      <div class="priority-item"><div class="priority-number">2</div><div class="priority-text"><strong>Integrasi ML:</strong> TFLite on-device (FP16, XNNPACK) klasifikasi jenis + kelayakan.</div></div>
+      <div class="priority-item"><div class="priority-number">3</div><div class="priority-text"><strong>Hosting Stabil:</strong> Hypercloud + HTTPS + backup teruji.</div></div>
+      <div class="priority-item"><div class="priority-number">4</div><div class="priority-text"><strong>Offline Ringan:</strong> cache katalog 24 jam & antre transaksi (retry).</div></div>
+      <div class="priority-item"><div class="priority-number">5</div><div class="priority-text"><strong>Audit Trail:</strong> rekam perubahan harga/stock untuk akuntabilitas.</div></div>
+    </div>
+  </div>
+
+  <!-- Gaps / Must Add -->
+  <div class="section no-break">
+    <h2 class="section-title"><span class="section-icon">🧩</span>Yang Masih Kurang & Wajib Ditambahkan</h2>
+    <div class="dod-box">
+      <ul class="dod-list">
+        <li>Hosting produksi Hypercloud + domain + HTTPS + backup — <strong>terjadwal Minggu 1–3</strong>.</li>
+        <li>Integrasi ML on-device (TFLite) + UI + threshold dinamis — <strong>Minggu 2</strong>.</li>
+        <li>Batch Scan lengkap draf→commit + simpan lokal — <strong>Minggu 2</strong> & polish <strong>Minggu 4</strong>.</li>
+        <li>Cart/Favorites per-user (limit 100) — <strong>Minggu 1</strong>.</li>
+        <li>Role & scoping seller di semua CRUD — <strong>Minggu 1</strong>.</li>
+        <li>Pencarian buyer global, seller scoped — <strong>Minggu 1</strong>.</li>
+        <li>Offline ringan & antre transaksi — <strong>Minggu 3</strong>.</li>
+        <li>Audit trail harga/stock — <strong>Minggu 3</strong>.</li>
+        <li>QA/UAT & dokumentasi presentasi — <strong>Minggu 3–4</strong>.</li>
+      </ul>
+      <div class="small-note"><em>Nice-to-have:</em> object storage S3-compatible; telemetri ringan; dark mode/polish visual.</div>
+    </div>
+  </div>
+
+  <!-- Risks -->
+  <div class="section no-break">
+    <h2 class="section-title"><span class="section-icon">⚠️</span>Manajemen Risiko & Mitigasi</h2>
+    <div class="risk-grid">
+      <div class="risk-item">
+        <div class="risk-title">🎥 Kamera Web butuh HTTPS</div>
+        <div class="risk-mitigation"><strong>Mitigasi:</strong> Prioritaskan Android fisik untuk demo; gunakan staging HTTPS/ngrok untuk uji web.</div>
+      </div>
+      <div class="risk-item">
+        <div class="risk-title">🌐 Latensi Mobile → Cloud</div>
+        <div class="risk-mitigation"><strong>Mitigasi:</strong> Cache katalog; retry local queue; pagination & debounce.</div>
+      </div>
+      <div class="risk-item">
+        <div class="risk-title">🔐 Kebocoran Role/Policy</div>
+        <div class="risk-mitigation"><strong>Mitigasi:</strong> Unit test policy; middleware ownership; audit trail.</div>
+      </div>
+      <div class="risk-item">
+        <div class="risk-title">📱 Kinerja ML di Perangkat Low-end</div>
+        <div class="risk-mitigation"><strong>Mitigasi:</strong> TFLite FP16 + XNNPACK; resize input; batasi resolusi kamera.</div>
+      </div>
+      <div class="risk-item">
+        <div class="risk-title">🍪 CORS/Sanctum Cookie</div>
+        <div class="risk-mitigation"><strong>Mitigasi:</strong> Pastikan <code>SANCTUM_STATEFUL_DOMAINS</code> & <code>SESSION_DOMAIN</code> konsisten; fallback token untuk mobile.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Reference -->
+  <div class="section no-break">
+    <h2 class="section-title"><span class="section-icon">📋</span>Ringkasan Praktis & Checkpoints</h2>
+    <div class="dod-box">
+      <div class="dod-title">Cheatsheet Tim</div>
+      <ul class="dod-list">
+        <li><strong>Target “Siap”:</strong> 28–30 Sep code-freeze + materi presentasi → Awal Okt uji & presentasi.</li>
+        <li><strong>Prioritas:</strong> Batch Scan → Integrasi ML → Hosting stabil → Offline ringan → Audit trail.</li>
+        <li><strong>Ritual:</strong> stand-up harian 15 menit; sync Selasa & Jumat; UAT Minggu 3 & 4.</li>
+        <li><strong>Milestone:</strong> rilis v1.0 tanggal 28 Sep.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p><strong>E-Buyur Project</strong> — Marketplace Sayuran Segar dengan ML Classification</p>
+    <p>September 2025 Development Roadmap • Version 1.0</p>
+  </div>
+</div>
+
+<script>
+/* ========= Perbaikan judul saat print ========= */
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.querySelector('.print-button');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    const d = new Date();
+    const ts = d.toISOString().slice(0,10);
+    document.title = `E-Buyur_Roadmap_${ts}`;
+  });
+});
+
+/* ========= Kalender September 2025 ========= */
+const EVENTS = [
+  // Minggu 1
+  {d:'2025-09-01', t:'erik',  label:'Storage, sessions, Sanctum/CORS'},
+  {d:'2025-09-01', t:'devin', label:'Android package & base URL'},
+  {d:'2025-09-02', t:'erik',  label:'Hardening & logging'},
+  {d:'2025-09-02', t:'devin', label:'Endpoint base URL build'},
+  {d:'2025-09-03', t:'erik',  label:'Provision Hypercloud & stack'},
+  {d:'2025-09-03', t:'devin', label:'Cart/Favorites per-user'},
+  {d:'2025-09-04', t:'erik',  label:'CI/CD & .env.staging'},
+  {d:'2025-09-04', t:'devin', label:'Routing role'},
+  {d:'2025-09-05', t:'erik',  label:'Domain + HTTPS; APP_URL'},
+  {d:'2025-09-05', t:'devin', label:'Scope Kelola Produk/Toko'},
+  {d:'2025-09-06', t:'devin', label:'Pencarian buyer/seller'},
+  {d:'2025-09-07', t:'qa',    label:'Smoke test end-to-end'},
+
+  // Minggu 2
+  {d:'2025-09-08', t:'erik',  label:'Threshold settings API'},
+  {d:'2025-09-08', t:'devin', label:'Integrasi TFLite FP16'},
+  {d:'2025-09-09', t:'erik',  label:'Model metadata endpoint'},
+  {d:'2025-09-09', t:'devin', label:'UI hasil inferensi'},
+  {d:'2025-09-10', t:'devin', label:'Batch Scan v1: scan → draf'},
+  {d:'2025-09-11', t:'erik',  label:'/batch/commit API + policy'},
+  {d:'2025-09-12', t:'devin', label:'Draf lokal & review'},
+  {d:'2025-09-13', t:'qa',    label:'Uji lapangan Android'},
+  {d:'2025-09-14', t:'qa',    label:'Optimasi kamera & inferensi'},
+
+  // Minggu 3
+  {d:'2025-09-15', t:'devin', label:'Offline: cache katalog'},
+  {d:'2025-09-16', t:'erik',  label:'Audit trail schema'},
+  {d:'2025-09-17', t:'devin', label:'Local queue transaksi'},
+  {d:'2025-09-18', t:'erik',  label:'Setup produksi + monitoring'},
+  {d:'2025-09-19', t:'devin', label:'UX polish, perf list'},
+  {d:'2025-09-20', t:'qa',    label:'UAT siklus 1 (buyer/seller)'},
+  {d:'2025-09-21', t:'qa',    label:'Bug triage P0/P1/P2'},
+
+  // Minggu 4
+  {d:'2025-09-22', t:'erik',  label:'Security & performance'},
+  {d:'2025-09-23', t:'devin', label:'Polish Batch Scan'},
+  {d:'2025-09-24', t:'erik',  label:'Indexing DB & SOP recovery'},
+  {d:'2025-09-25', t:'qa',    label:'UAT siklus 2'},
+  {d:'2025-09-26', t:'qa',    label:'Stress kecil & jaringan lemah'},
+  {d:'2025-09-27', t:'qa',    label:'Fix & verifikasi'},
+  {d:'2025-09-28', t:'milestone', label:'Freeze v1.0 + changelog'},
+  {d:'2025-09-29', t:'milestone', label:'Materi presentasi & buffer'},
+  {d:'2025-09-30', t:'milestone', label:'Rehearsal & perbaikan P0'},
+];
+
+const colorMap = {
+  erik: 'var(--brand-green)',
+  devin:'var(--brand-orange)',
+  qa:   'var(--blue)',
+  milestone:'#7c3aed'
+};
+
+function buildCalendar(year, monthIdx){ // monthIdx: 0..11
+  const grid = document.getElementById('cal-grid');
+  const dayNames = ['Sen','Sel','Rab','Kam','Jum','Sab','Min']; // Monday-first
+
+  // Header row
+  dayNames.forEach(n=>{
+    const dn = document.createElement('div');
+    dn.className='cal-dayname';
+    dn.textContent=n;
+    grid.appendChild(dn);
+  });
+
+  // Find first cell date (nearest Monday before/at the 1st)
+  const first = new Date(year, monthIdx, 1);
+  const firstDow = (first.getDay()+6)%7; // make Mon=0
+  const start = new Date(year, monthIdx, 1 - firstDow);
+
+  for(let i=0;i<42;i++){
+    const d = new Date(start);
+    d.setDate(start.getDate()+i);
+
+    const cell = document.createElement('div');
+    cell.className='cal-cell';
+    const isCurrentMonth = d.getMonth()===monthIdx;
+    if(!isCurrentMonth) cell.classList.add('muted');
+
+    const dateStr = d.toISOString().slice(0,10);
+    const dateNum = d.getDate();
+
+    const dateEl = document.createElement('div');
+    dateEl.className='cal-date';
+    dateEl.textContent=dateNum;
+    cell.appendChild(dateEl);
+
+    // events for this day
+    const todays = EVENTS.filter(e=>e.d===dateStr);
+    if(todays.length){
+      cell.classList.add('cal-has');
+      const dots = document.createElement('div');
+      dots.className='cal-dots';
+      todays.forEach(ev=>{
+        const dot = document.createElement('span');
+        dot.style.background = colorMap[ev.t] || '#111';
+        dots.appendChild(dot);
+      });
+      cell.appendChild(dots);
+
+      // popover details
+      const pop = document.createElement('div');
+      pop.className='cal-pop';
+      pop.innerHTML = todays.map(ev => {
+        const b = `<span class="badge ${ev.t}" style="background:${colorMap[ev.t]};margin-right:6px;">${ev.t.charAt(0).toUpperCase()+ev.t.slice(1)}</span>`;
+        return `${b} ${ev.label}`;
+      }).join('<br/>');
+      cell.appendChild(pop);
+    }
+
+    grid.appendChild(cell);
+  }
+}
+
+buildCalendar(2025, 8); // September 2025 (month index 8)
+
+/* KPI + Role chart */
+function within(dateStr, start, end){ const d = new Date(dateStr); return d>=start && d<=end; }
+function countByRole(rangeStart, rangeEnd){
+  const roles = {erik:0, devin:0, qa:0, milestone:0};
+  EVENTS.forEach(ev=>{ if(within(ev.d, rangeStart, rangeEnd)) roles[ev.t] = (roles[ev.t]||0) + 1; });
+  return roles;
+}
+const WEEKS = [
+  { label:'Minggu 1 (1–7)',   start:new Date('2025-09-01'), end:new Date('2025-09-07') },
+  { label:'Minggu 2 (8–14)',  start:new Date('2025-09-08'), end:new Date('2025-09-14') },
+  { label:'Minggu 3 (15–21)', start:new Date('2025-09-15'), end:new Date('2025-09-21') },
+  { label:'Minggu 4 (22–30)', start:new Date('2025-09-22'), end:new Date('2025-09-30') }
+];
+const weekly = WEEKS.map(w=>({ label:w.label, ...countByRole(w.start, w.end) }));
+const totals = weekly.reduce((a,w)=>({erik:a.erik+w.erik, devin:a.devin+w.devin, qa:a.qa+w.qa, milestone:a.milestone+w.milestone}), {erik:0,devin:0,qa:0,milestone:0});
+
+const kpi = document.getElementById('kpi');
+kpi.innerHTML = `
+  <span class="pill erik">Erik: ${totals.erik}</span>
+  <span class="pill devin">Devin: ${totals.devin}</span>
+  <span class="pill qa">QA/UAT: ${totals.qa}</span>
+  <span class="pill milestone">Milestone: ${totals.milestone}</span>
+`;
+
+// Draw stacked horizontal bars
+(function draw(){
+  const svg = document.getElementById('role-svg');
+  const width = 800, height = 260, left=140, right=24, top=20, rowH=40, gap=16;
+  svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+  // bg
+  const bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
+  bg.setAttribute('x','0'); bg.setAttribute('y','0'); bg.setAttribute('width',width); bg.setAttribute('height',height);
+  bg.setAttribute('fill','#ffffff'); svg.appendChild(bg);
+  const maxVal = Math.max(...weekly.map(w=> w.erik + w.devin));
+  const usable = width - left - right;
+  const scale = usable/Math.max(1, maxVal);
+  weekly.forEach((w,i)=>{
+    const y = top + i*(rowH+gap);
+    // label
+    const tl = document.createElementNS('http://www.w3.org/2000/svg','text');
+    tl.setAttribute('x', left-10); tl.setAttribute('y', y+18);
+    tl.setAttribute('fill', '#111827'); tl.setAttribute('font-size','12'); tl.setAttribute('text-anchor','end');
+    tl.textContent = w.label; svg.appendChild(tl);
+    // Erik
+    const w1 = w.erik*scale;
+    const r1 = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    r1.setAttribute('x', left); r1.setAttribute('y', y); r1.setAttribute('width', Math.max(0,w1)); r1.setAttribute('height', 20);
+    r1.setAttribute('fill', 'var(--brand-green)'); r1.setAttribute('rx','6'); svg.appendChild(r1);
+    // Devin
+    const w2 = w.devin*scale;
+    const r2 = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    r2.setAttribute('x', left + w1 + (w2>0?2:0)); r2.setAttribute('y', y); r2.setAttribute('width', Math.max(0,w2)); r2.setAttribute('height', 20);
+    r2.setAttribute('fill', 'var(--brand-orange)'); r2.setAttribute('rx','6'); svg.appendChild(r2);
+    // value text
+    const tt = document.createElementNS('http://www.w3.org/2000/svg','text');
+    tt.setAttribute('x', left + Math.min(usable-50, Math.max(60, (w1+w2)/2 )) );
+    tt.setAttribute('y', y+15);
+    tt.setAttribute('fill', '#1f2937'); tt.setAttribute('font-size','11');
+    tt.textContent = `Erik ${w.erik} • Devin ${w.devin}`; svg.appendChild(tt);
+  });
+})();
+</script>
+</body>
+</html>

@@ -49,10 +49,10 @@ body{
   position:fixed;inset:0 0 auto 0;height:64px;background:var(--nav);backdrop-filter:blur(10px);
   display:flex;align-items:center;justify-content:center;z-index:999;border-bottom:1px solid #0b122033
 }
-.nav-inner{width:100%;max-width:1150px;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:0 16px}
-.brand{display:flex;gap:10px;align-items:center;color:#fff;font-weight:900;letter-spacing:.2px}
-.brand img{height:34px;width:auto}
-.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.nav-inner{width:100%;max-width:1150px;display:flex;gap:10px;align-items:center;justify-content:space-between;padding:0 12px}
+.brand{display:flex;gap:8px;align-items:center}
+.brand img{height:34px;width:auto;display:block}
+.tabs{display:flex;gap:8px;flex-wrap:nowrap;align-items:center;justify-content:center;flex:1}
 .tab-btn{
   appearance:none;border:none;cursor:pointer;padding:10px 14px;border-radius:999px;font-weight:800;
   color:#fff;background:#ffffff22;border:1px solid #ffffff33;transition:transform .15s ease, background .2s ease
@@ -65,6 +65,14 @@ body{
   box-shadow:0 10px 20px rgba(255,255,255,.12)
 }
 
+/* Mobile nav fixes: logo kecil, tombol 2 kolom, hindari tumpang tindih */
+@media (max-width: 600px){
+  .brand{min-width:44px}
+  .tabs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  .tab-btn{width:100%;text-align:center}
+  .right-actions{display:none}
+}
+
 /* ========= Header ========= */
 .header{
   background:linear-gradient(135deg,var(--brand-green) 0%,var(--brand-orange) 100%);
@@ -74,7 +82,7 @@ body{
 .header .subtitle{font-size:16px;opacity:.97}
 .header .date-range{font-size:14px;margin-top:12px;padding:8px 16px;background:rgba(255,255,255,.22);border-radius:18px;display:inline-block}
 .header .logo{display:flex;justify-content:center;margin-bottom:10px}
-.header .logo img{height:80px;max-width:100%;object-fit:contain}
+.header .logo img{height:84px;max-width:100%;object-fit:contain}
 @media (max-width:900px){ .header .logo img{height:72px} }
 @media (max-width:480px){ .header .logo img{height:64px} }
 
@@ -117,7 +125,7 @@ body{
 .output-box strong{color:#166534}
 @media (max-width: 900px){ .task-grid{grid-template-columns:1fr} }
 
-/* Team / Priority / Risks (unchanged from your latest) */
+/* Team / Priority / Risks */
 .team-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .team-member{background:linear-gradient(135deg,#f6f9fc 0%,#fff 100%);border:1px solid #e2e8f0;border-radius:10px;padding:14px}
 .member-name{font-size:18px;font-weight:900;color:var(--ink-2);margin-bottom:6px}
@@ -166,6 +174,33 @@ body{
 /* Views */
 .view{display:none}
 .view.active{display:block}
+
+/* ========= Perbaikan (UI) ========= */
+.info-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:8px 0 16px}
+.kpi-card{background:#0b1220;color:#fff;border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.kpi-card .big{font-size:22px;font-weight:900}
+.kpi-card .label{opacity:.85;font-size:12px}
+.filter-chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 10px;font-weight:700;font-size:12px;color:#334155;cursor:pointer}
+.chip.active{background:#111827;color:#fff;border-color:#111827}
+.searchbar{display:flex;gap:8px;margin:8px 0 12px}
+.searchbar input{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit}
+.fix-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fix-card{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(2,8,23,.04)}
+.fix-head{background:#0f172a;color:#fff;padding:10px 12px;font-weight:900;display:flex;justify-content:space-between;align-items:center}
+.fix-head small{opacity:.85}
+.fix-body{padding:12px}
+.fix-list{list-style:none}
+.fix-list li{padding:8px 0 8px 24px;position:relative;color:#334155;border-bottom:1px dashed #eaeaea}
+.fix-list li:last-child{border-bottom:none}
+.fix-list li:before{content:"•";position:absolute;left:10px;top:10px;color:var(--brand-green);font-weight:900}
+.badge-cat{padding:2px 8px;border-radius:999px;background:#eef2ff;color:#3730a3;font-size:11px;font-weight:800}
+.spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.spec{background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:10px;font-size:13px}
+.price{font-weight:900;color:#0b1220}
+.progress{height:8px;background:#eef2ff;border-radius:999px;overflow:hidden}
+.progress>span{display:block;height:100%;background:linear-gradient(90deg,#0ea5e9,#7c3aed)}
+@media (max-width: 900px){ .fix-grid{grid-template-columns:1fr} .info-row{grid-template-columns:1fr} }
 </style>
 </head>
 
@@ -173,11 +208,7 @@ body{
 <!-- Top Navigation -->
 <div class="topnav">
   <div class="nav-inner">
-    <div class="brand">
-      <!-- gunakan file logo yang kamu kirim -->
-      <img src="Untitled-9-01.png" alt="E-Buyur Logo"/>
-      <span>E-BUYUR</span>
-    </div>
+    <div class="brand"><img src="Untitled-9-01.png" alt="E-Buyur Logo"/></div>
     <div class="tabs">
       <button class="tab-btn active" data-target="#view-roadmap">Roadmap</button>
       <button class="tab-btn" data-target="#view-perbaikan">Perbaikan</button>
@@ -193,10 +224,7 @@ body{
   <div class="container">
     <!-- Header -->
     <div class="header">
-      <div class="logo">
-        <!-- logo besar & jelas -->
-        <img src="Untitled-9-01.png" alt="E-Buyur Market"/>
-      </div>
+      <div class="logo"><img src="Untitled-9-01.png" alt="E-Buyur Market"/></div>
       <h1>E-BUYUR PROJECT ROADMAP</h1>
       <div class="subtitle">Marketplace Sayuran Segar • Laravel + Flutter + TFLite • Hypercloud</div>
       <div class="date-range">📅 September 2025 → Presentasi Awal Oktober</div>
@@ -223,7 +251,7 @@ body{
       </div>
     </div>
 
-    <!-- Kalender + Grafik -->
+    <!-- Kalender -->
     <div class="section no-break">
       <h2 class="section-title"><span class="section-icon">📆</span>Kalender Jadwal — September 2025</h2>
       <div class="calendar">
@@ -257,7 +285,7 @@ body{
       </div>
     </div>
 
-    <!-- Timeline (penuh seperti versi kamu) -->
+    <!-- Timeline (rinci) — sama seperti versi sebelumnya -->
     <div class="section">
       <h2 class="section-title"><span class="section-icon">📅</span>Timeline September 2025</h2>
 
@@ -270,7 +298,6 @@ body{
           </div>
           <div class="week-content">
             <div class="week-objective"><strong>Tujuan:</strong> fondasi beres & server siap—aplikasi stabil dasar.</div>
-
             <div class="task-grid">
               <div class="task-column">
                 <div class="task-owner">👨‍💻 Erik — 1–2 Sep</div>
@@ -287,7 +314,6 @@ body{
                   <li>Flutter web bisa auth via Sanctum (CORS OK).</li>
                 </ul>
               </div>
-
               <div class="task-column">
                 <div class="task-owner">👨‍💻 Devin — 1–2 Sep</div>
                 <ul class="task-list">
@@ -358,236 +384,148 @@ body{
           </div>
           <div class="week-content">
             <div class="week-objective"><strong>Tujuan:</strong> TFLite on-device aktif + batch scan draft → post.</div>
-
             <div class="task-grid">
               <div class="task-column">
                 <div class="task-owner">👨‍💻 Erik — 8–9 Sep</div>
-                <ul class="task-list">
-                  <li>Threshold settings (65–80%).</li>
-                  <li>API metadata model.</li>
-                </ul>
+                <ul class="task-list"><li>Threshold settings (65–80%).</li><li>API metadata model.</li></ul>
               </div>
               <div class="task-column">
                 <div class="task-owner">👨‍💻 Devin — 8–10 Sep</div>
-                <ul class="task-list">
-                  <li>Integrasi TFLite FP16; label + probabilitas.</li>
-                  <li>Badge “Layak” ≥ threshold; fallback tips.</li>
-                </ul>
+                <ul class="task-list"><li>Integrasi TFLite FP16; label + probabilitas.</li><li>Badge “Layak” ≥ threshold; fallback tips.</li></ul>
               </div>
             </div>
-
             <div class="task-grid" style="margin-top:12px">
               <div class="task-column">
                 <div class="task-owner">👨‍💻 Devin — 10–12 Sep (Batch Scan v1)</div>
-                <ul class="task-list">
-                  <li>Mode “Scan Beruntun” → draf lokal.</li>
-                  <li>Tinjau draf → Commit massal.</li>
-                </ul>
+                <ul class="task-list"><li>Mode “Scan Beruntun” → draf lokal.</li><li>Tinjau draf → Commit massal.</li></ul>
               </div>
               <div class="task-column">
                 <div class="task-owner">👨‍💻 Erik — 11–12 Sep</div>
-                <ul class="task-list">
-                  <li>Endpoint <code>/batch/drafts</code> (opsional) & <code>/batch/commit</code> + policy ownership.</li>
-                </ul>
+                <ul class="task-list"><li>Endpoint <code>/batch/drafts</code> (opsional) & <code>/batch/commit</code> + policy ownership.</li></ul>
               </div>
             </div>
-
             <div class="task-grid" style="margin-top:12px">
               <div class="task-column" style="grid-column:1 / -1">
                 <div class="task-owner">👥 13–14 Sep — Uji Lapangan</div>
-                <ul class="task-list">
-                  <li>Android + HTTPS; optimasi kamera & inferensi.</li>
-                </ul>
+                <ul class="task-list"><li>Android + HTTPS; optimasi kamera & inferensi.</li></ul>
               </div>
             </div>
-
             <div class="output-box"><strong>Output Minggu 2:</strong> ML live + Batch Scan v1 siap dipakai seller.</div>
           </div>
         </div>
 
         <!-- WEEK 3 -->
         <div class="week no-break">
-          <div class="week-header">
-            <span class="week-title">Minggu 3 — 15–21 Sep • Offline Ringan, Audit Trail, Hardening</span>
-            <span class="week-dates">15–21 Sep</span>
-          </div>
+          <div class="week-header"><span class="week-title">Minggu 3 — 15–21 Sep • Offline Ringan, Audit Trail, Hardening</span><span class="week-dates">15–21 Sep</span></div>
           <div class="week-content">
             <div class="week-objective"><strong>Tujuan:</strong> nilai jual + keamanan & ketahanan.</div>
-
             <div class="task-grid">
               <div class="task-column">
-                <div class="task-owner">👨‍💻 Devin — 15–17 Sep (Offline Ringan)</div>
-                <ul class="task-list">
-                  <li>Cache katalog 24 jam & local queue transaksi (retry).</li>
-                  <li>UI indikator koneksi & sinkronisasi.</li>
-                </ul>
+                <div class="task-owner">👨‍💻 Devin — 15–17 Sep</div>
+                <ul class="task-list"><li>Cache katalog 24 jam & local queue transaksi (retry).</li><li>UI indikator koneksi & sinkronisasi.</li></ul>
               </div>
               <div class="task-column">
-                <div class="task-owner">👨‍💻 Erik — 15–16 Sep (Audit Trail)</div>
-                <ul class="task-list">
-                  <li>Tabel <code>product_audits</code> + halaman histori.</li>
-                </ul>
+                <div class="task-owner">👨‍💻 Erik — 15–16 Sep</div>
+                <ul class="task-list"><li>Tabel <code>product_audits</code> + halaman histori.</li></ul>
               </div>
             </div>
-
             <div class="task-grid" style="margin-top:12px">
-              <div class="task-column">
-                <div class="task-owner">👨‍💻 Erik — 18–19 Sep (Produksi)</div>
-                <ul class="task-list">
-                  <li>Env prod, backup otomatis, monitoring.</li>
-                </ul>
-              </div>
-              <div class="task-column">
-                <div class="task-owner">👨‍💻 Devin — 18–19 Sep (UX/Perf)</div>
-                <ul class="task-list">
-                  <li>Polish UI/UX; pagination; debounced search.</li>
-                </ul>
-              </div>
+              <div class="task-column"><div class="task-owner">👨‍💻 Erik — 18–19 Sep</div><ul class="task-list"><li>Env prod, backup otomatis, monitoring.</li></ul></div>
+              <div class="task-column"><div class="task-owner">👨‍💻 Devin — 18–19 Sep</div><ul class="task-list"><li>Polish UI/UX; pagination; debounced search.</li></ul></div>
             </div>
-
             <div class="task-grid" style="margin-top:12px">
               <div class="task-column" style="grid-column:1 / -1">
                 <div class="task-owner">👥 20–21 Sep — UAT Siklus 1</div>
-                <ul class="task-list">
-                  <li>Buyer: browse → cart → checkout; Seller: batch scan → commit.</li>
-                </ul>
+                <ul class="task-list"><li>Buyer: browse → cart → checkout; Seller: batch scan → commit.</li></ul>
               </div>
             </div>
-
             <div class="output-box"><strong>Output Minggu 3:</strong> offline ringan & audit trail aktif, produksi siap, UAT-1 selesai.</div>
           </div>
         </div>
 
         <!-- WEEK 4 -->
         <div class="week no-break">
-          <div class="week-header">
-            <span class="week-title">Minggu 4 — 22–30 Sep • Stabilisasi Akhir, Dokumentasi, Dress Rehearsal</span>
-            <span class="week-dates">22–30 Sep</span>
-          </div>
+          <div class="week-header"><span class="week-title">Minggu 4 — 22–30 Sep • Stabilisasi Akhir, Dokumentasi, Dress Rehearsal</span><span class="week-dates">22–30 Sep</span></div>
           <div class="week-content">
             <div class="week-objective"><strong>Tujuan:</strong> feature freeze; fokus kualitas & materi presentasi.</div>
-
             <div class="task-grid">
-              <div class="task-column">
-                <div class="task-owner">👨‍💻 Erik — 22–24 Sep</div>
-                <ul class="task-list">
-                  <li>Rate limit, validasi, pagination, index DB; SOP recovery.</li>
-                </ul>
-              </div>
-              <div class="task-column">
-                <div class="task-owner">👨‍💻 Devin — 22–24 Sep</div>
-                <ul class="task-list">
-                  <li>Polish Batch Scan: seleksi massal, hapus draf, progress commit; slider threshold (view).</li>
-                </ul>
-              </div>
+              <div class="task-column"><div class="task-owner">👨‍💻 Erik — 22–24 Sep</div><ul class="task-list"><li>Rate limit, validasi, pagination, index DB; SOP recovery.</li></ul></div>
+              <div class="task-column"><div class="task-owner">👨‍💻 Devin — 22–24 Sep</div><ul class="task-list"><li>Polish Batch Scan: seleksi massal, hapus draf, progress commit; slider threshold (view).</li></ul></div>
             </div>
-
             <div class="task-grid" style="margin-top:12px">
-              <div class="task-column">
-                <div class="task-owner">👥 25–27 Sep — UAT Siklus 2</div>
-                <ul class="task-list">
-                  <li>Perf ringan; simulasi jaringan lemah & kamera.</li>
-                </ul>
-              </div>
-              <div class="task-column">
-                <div class="task-owner">👨‍💻 Erik & Devin — 28–30 Sep</div>
-                <ul class="task-list">
-                  <li>Freeze v1.0 + changelog + runbook; materi presentasi & buffer P0.</li>
-                </ul>
-              </div>
+              <div class="task-column"><div class="task-owner">👥 25–27 Sep — UAT Siklus 2</div><ul class="task-list"><li>Perf ringan; simulasi jaringan lemah & kamera.</li></ul></div>
+              <div class="task-column"><div class="task-owner">👨‍💻 Erik & Devin — 28–30 Sep</div><ul class="task-list"><li>Freeze v1.0 + changelog + runbook; materi presentasi & buffer P0.</li></ul></div>
             </div>
-
             <div class="output-box"><strong>Output Minggu 4:</strong> rilis stabil v1.0 + dokumen lengkap + materi presentasi siap.</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Team / Priorities / Risks / Quick Reference (tetap sama seperti sebelumnya) -->
-    <div class="container-inner"> <!-- pembungkus opsional -->
-      <!-- Team -->
-      <div class="section no-break">
-        <h2 class="section-title"><span class="section-icon">👥</span>Pembagian Tanggung Jawab</h2>
-        <div class="team-grid">
-          <div class="team-member">
-            <div class="member-name">Erik</div>
-            <div class="member-role">Lead Backend • DevOps • ML Integration</div>
-            <ul class="responsibility-list">
-              <li>Laravel infra: storage (symlink), sessions (DB), Sanctum/CORS (stateful domains).</li>
-              <li>Hypercloud: provisioning, Nginx/PHP-FPM, domain+HTTPS, CI/CD, backup & monitoring.</li>
-              <li>API: batch commit, settings threshold, audit trail, pencarian buyer global/seller scoped.</li>
-              <li>Keamanan/kinerja: rate limit, pagination, indexing DB.</li>
-              <li>Dokumentasi backend: .env contoh, migrasi DB, runbook deploy, disaster recovery.</li>
-              <li>Materi presentasi: arsitektur, data flow ML, hasil uji.</li>
-            </ul>
-          </div>
-          <div class="team-member">
-            <div class="member-name">Devin</div>
-            <div class="member-role">Mobile/Web Flutter • UX</div>
-            <ul class="responsibility-list">
-              <li>Konsistensi package Android & base URL (<code>--dart-define</code>).</li>
-              <li>Cart/Favorites per-user (limit 100), buyer & seller dashboard.</li>
-              <li>Integrasi TFLite (load model, inferensi, UI & threshold badge).</li>
-              <li>Batch Scan (scan beruntun → draf → commit), penyimpanan draf lokal.</li>
-              <li>Offline ringan (cache katalog + local queue), status koneksi & sinkronisasi.</li>
-              <li>Polishing UI/UX, skeleton/loading/error handling, performance list.</li>
-              <li>Materi presentasi: rekaman alur buyer & seller.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- Priorities -->
-      <div class="section no-break">
-        <h2 class="section-title"><span class="section-icon">⭐</span>Prioritas Fitur</h2>
-        <div class="priority-list">
-          <div class="priority-item"><div class="priority-number">1</div><div class="priority-text"><strong>Batch Scan:</strong> fitur utama seller untuk scan massal → draf → commit.</div></div>
-          <div class="priority-item"><div class="priority-number">2</div><div class="priority-text"><strong>Integrasi ML:</strong> TFLite on-device (FP16, XNNPACK) klasifikasi jenis + kelayakan.</div></div>
-          <div class="priority-item"><div class="priority-number">3</div><div class="priority-text"><strong>Hosting Stabil:</strong> Hypercloud + HTTPS + backup teruji.</div></div>
-          <div class="priority-item"><div class="priority-number">4</div><div class="priority-text"><strong>Offline Ringan:</strong> cache katalog 24 jam & antre transaksi (retry).</div></div>
-          <div class="priority-item"><div class="priority-number">5</div><div class="priority-text"><strong>Audit Trail:</strong> rekam perubahan harga/stok untuk akuntabilitas.</div></div>
-        </div>
-      </div>
-
-      <!-- Risks -->
-      <div class="section no-break">
-        <h2 class="section-title"><span class="section-icon">⚠️</span>Manajemen Risiko & Mitigasi</h2>
-        <div class="risk-grid">
-          <div class="risk-item">
-            <div class="risk-title">🎥 Kamera Web butuh HTTPS</div>
-            <div class="risk-mitigation"><strong>Mitigasi:</strong> Prioritaskan Android fisik untuk demo; gunakan staging HTTPS/ngrok untuk uji web.</div>
-          </div>
-          <div class="risk-item">
-            <div class="risk-title">🌐 Latensi Mobile → Cloud</div>
-            <div class="risk-mitigation"><strong>Mitigasi:</strong> Cache katalog; retry local queue; pagination & debounce.</div>
-          </div>
-          <div class="risk-item">
-            <div class="risk-title">🔐 Kebocoran Role/Policy</div>
-            <div class="risk-mitigation"><strong>Mitigasi:</strong> Unit test policy; middleware ownership; audit trail.</div>
-          </div>
-          <div class="risk-item">
-            <div class="risk-title">📱 Kinerja ML di Perangkat Low-end</div>
-            <div class="risk-mitigation"><strong>Mitigasi:</strong> TFLite FP16 + XNNPACK; resize input; batasi resolusi kamera.</div>
-          </div>
-          <div class="risk-item">
-            <div class="risk-title">🍪 CORS/Sanctum Cookie</div>
-            <div class="risk-mitigation"><strong>Mitigasi:</strong> Pastikan <code>SANCTUM_STATEFUL_DOMAINS</code> & <code>SESSION_DOMAIN</code> konsisten; fallback token untuk mobile.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quick Reference -->
-      <div class="section no-break">
-        <h2 class="section-title"><span class="section-icon">📋</span>Ringkasan Praktis & Checkpoints</h2>
-        <div class="dod-box">
-          <div class="dod-title">Cheatsheet Tim</div>
-          <ul class="dod-list">
-            <li><strong>Target “Siap”:</strong> 28–30 Sep code-freeze + materi presentasi → Awal Okt uji & presentasi.</li>
-            <li><strong>Prioritas:</strong> Batch Scan → Integrasi ML → Hosting stabil → Offline ringan → Audit trail.</li>
-            <li><strong>Ritual:</strong> stand-up harian 15 menit; sync Selasa & Jumat; UAT Minggu 3 & 4.</li>
-            <li><strong>Milestone:</strong> rilis v1.0 tanggal 28 Sep.</li>
+    <!-- Team / Priorities / Risks / Quick Reference -->
+    <div class="section no-break">
+      <h2 class="section-title"><span class="section-icon">👥</span>Pembagian Tanggung Jawab</h2>
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="member-name">Erik</div>
+          <div class="member-role">Lead Backend • DevOps • ML Integration</div>
+          <ul class="responsibility-list">
+            <li>Laravel infra: storage (symlink), sessions (DB), Sanctum/CORS (stateful domains).</li>
+            <li>Hypercloud: provisioning, Nginx/PHP-FPM, domain+HTTPS, CI/CD, backup & monitoring.</li>
+            <li>API: batch commit, settings threshold, audit trail, pencarian buyer global/seller scoped.</li>
+            <li>Keamanan/kinerja: rate limit, pagination, indexing DB.</li>
+            <li>Dokumentasi backend: .env contoh, migrasi DB, runbook deploy, disaster recovery.</li>
+            <li>Materi presentasi: arsitektur, data flow ML, hasil uji.</li>
           </ul>
         </div>
+        <div class="team-member">
+          <div class="member-name">Devin</div>
+          <div class="member-role">Mobile/Web Flutter • UX</div>
+          <ul class="responsibility-list">
+            <li>Konsistensi package Android & base URL (<code>--dart-define</code>).</li>
+            <li>Cart/Favorites per-user (limit 100), buyer & seller dashboard.</li>
+            <li>Integrasi TFLite (load model, inferensi, UI & threshold badge).</li>
+            <li>Batch Scan (scan beruntun → draf → commit), penyimpanan draf lokal.</li>
+            <li>Offline ringan (cache katalog + local queue), status koneksi & sinkronisasi.</li>
+            <li>Polishing UI/UX, skeleton/loading/error handling, performance list.</li>
+            <li>Materi presentasi: rekaman alur buyer & seller.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section no-break">
+      <h2 class="section-title"><span class="section-icon">⭐</span>Prioritas Fitur</h2>
+      <div class="priority-list">
+        <div class="priority-item"><div class="priority-number">1</div><div class="priority-text"><strong>Batch Scan:</strong> fitur utama seller untuk scan massal → draf → commit.</div></div>
+        <div class="priority-item"><div class="priority-number">2</div><div class="priority-text"><strong>Integrasi ML:</strong> TFLite on-device (FP16, XNNPACK) klasifikasi jenis + kelayakan.</div></div>
+        <div class="priority-item"><div class="priority-number">3</div><div class="priority-text"><strong>Hosting Stabil:</strong> Hypercloud + HTTPS + backup teruji.</div></div>
+        <div class="priority-item"><div class="priority-number">4</div><div class="priority-text"><strong>Offline Ringan:</strong> cache katalog 24 jam & antre transaksi (retry).</div></div>
+        <div class="priority-item"><div class="priority-number">5</div><div class="priority-text"><strong>Audit Trail:</strong> rekam perubahan harga/stok untuk akuntabilitas.</div></div>
+      </div>
+    </div>
+
+    <div class="section no-break">
+      <h2 class="section-title"><span class="section-icon">⚠️</span>Manajemen Risiko & Mitigasi</h2>
+      <div class="risk-grid">
+        <div class="risk-item"><div class="risk-title">🎥 Kamera Web butuh HTTPS</div><div class="risk-mitigation"><strong>Mitigasi:</strong> Prioritaskan Android fisik untuk demo; gunakan staging HTTPS/ngrok.</div></div>
+        <div class="risk-item"><div class="risk-title">🌐 Latensi Mobile → Cloud</div><div class="risk-mitigation"><strong>Mitigasi:</strong> Cache katalog; retry local queue; pagination & debounce.</div></div>
+        <div class="risk-item"><div class="risk-title">🔐 Kebocoran Role/Policy</div><div class="risk-mitigation"><strong>Mitigasi:</strong> Unit test policy; middleware ownership; audit trail.</div></div>
+        <div class="risk-item"><div class="risk-title">📱 Kinerja ML di Perangkat Low-end</div><div class="risk-mitigation"><strong>Mitigasi:</strong> TFLite FP16 + XNNPACK; resize input; batasi resolusi kamera.</div></div>
+        <div class="risk-item"><div class="risk-title">🍪 CORS/Sanctum Cookie</div><div class="risk-mitigation"><strong>Mitigasi:</strong> Pastikan <code>SANCTUM_STATEFUL_DOMAINS</code> & <code>SESSION_DOMAIN</code> konsisten; fallback token.</div></div>
+      </div>
+    </div>
+
+    <div class="section no-break">
+      <h2 class="section-title"><span class="section-icon">📋</span>Ringkasan Praktis & Checkpoints</h2>
+      <div class="dod-box">
+        <div class="dod-title">Cheatsheet Tim</div>
+        <ul class="dod-list">
+          <li><strong>Target “Siap”:</strong> 28–30 Sep code-freeze + materi presentasi → Awal Okt uji & presentasi.</li>
+          <li><strong>Prioritas:</strong> Batch Scan → Integrasi ML → Hosting stabil → Offline ringan → Audit trail.</li>
+          <li><strong>Ritual:</strong> stand-up harian 15 menit; sync Selasa & Jumat; UAT Minggu 3 & 4.</li>
+          <li><strong>Milestone:</strong> rilis v1.0 tanggal 28 Sep.</li>
+        </ul>
       </div>
     </div>
 
@@ -604,14 +542,57 @@ body{
     <div class="header" style="background:linear-gradient(135deg,#0ea5e9 0%,#7c3aed 100%)">
       <div class="logo"><img src="Untitled-9-01.png" alt="E-Buyur"/></div>
       <h1>E-BUYUR • Rencana Perbaikan</h1>
-      <div class="subtitle">Non-Teknis (Buyer & Seller) + Teknis (API, Server, Cache)</div>
-      <div class="date-range">📅 Basis catatan perbaikan September</div>
+      <div class="subtitle">Non-Teknis (Buyer & Seller) • Teknis (API, Server, Cache)</div>
+      <div class="date-range">📋 Kompilasi Catatan Perbaikan</div>
     </div>
 
-    <!-- (Isi perbaikan—accordion—tetap dari versi sebelumnya) -->
-    <!-- BUYER + SELLER + TEKNIS seperti pada jawaban sebelumnya -->
-    <!-- … demi ringkas tidak diulang penuh; tinggal tempel blok “Perbaikan” yang sudah kamu pakai. -->
-    <p style="color:#6b7280">*Tempelkan blok Perbaikan (accordion) dari versi sebelumnya di sini—strukturnya kompatibel.*</p>
+    <!-- KPI + Filter + Search -->
+    <div class="section">
+      <div class="info-row">
+        <div class="kpi-card"><div class="big" id="kpi-total">0</div><div class="label">Total Item Perbaikan</div></div>
+        <div class="kpi-card" style="background:#14532d"><div class="big" id="kpi-buyer">0</div><div class="label">Buyer</div></div>
+        <div class="kpi-card" style="background:#7c2d12"><div class="big" id="kpi-seller">0</div><div class="label">Seller & Teknis</div></div>
+      </div>
+      <div class="filter-chips">
+        <span class="chip active" data-filter="ALL">Semua</span>
+        <span class="chip" data-filter="Buyer">Buyer</span>
+        <span class="chip" data-filter="Seller">Seller</span>
+        <span class="chip" data-filter="Teknis">Teknis</span>
+      </div>
+      <div class="searchbar">
+        <input id="fix-search" type="search" placeholder="Cari perbaikan (mis. ‘pencarian’, ‘Midtrans’, ‘profil’)…"/>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="section">
+      <div id="fix-root" class="fix-grid"></div>
+    </div>
+
+    <!-- Budget Server -->
+    <div class="section">
+      <h2 class="section-title"><span class="section-icon">💸</span>Estimasi Biaya Server & Domain</h2>
+      <div class="spec-grid">
+        <div class="spec">
+          <div class="badge-cat">Hypercloud – Cloud Plus</div>
+          <ul class="fix-list" style="margin-top:6px">
+            <li>6 Core CPU • 10 GB RAM • SSD 50 GB</li>
+            <li>Unlimited Bandwidth • Gratis Unlimited SSL</li>
+            <li>Proteksi DDoS Maksimal • Unlimited Addon Domain</li>
+            <li>Backup Mingguan • Unlimited Email Account • Unlimited MySQL DB</li>
+          </ul>
+        </div>
+        <div class="spec">
+          <div class="badge-cat">Perkiraan Biaya</div>
+          <div style="margin-top:8px;display:grid;gap:6px">
+            <div>Cloud Hosting: <span class="price">Rp 110.000/bulan</span></div>
+            <div>Domain .com: <span class="price">Rp 200.000/tahun</span></div>
+            <div class="progress" title="3 bulan sewa + 1 domain"><span style="width:100%"></span></div>
+            <div><strong>Total 3 bulan + domain:</strong> <span class="price" id="biaya-total">Rp 530.000</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="footer">
       <p><strong>E-Buyur</strong> — Rencana Perbaikan UI/UX & Teknis</p>
@@ -643,7 +624,7 @@ document.querySelectorAll('.tab-btn').forEach(btn=>{
 
 /* ========= Kalender September 2025 ========= */
 const EVENTS = [
-  // tetap jadwal utama
+  // Minggu 1
   {d:'2025-09-01', t:'erik',  label:'Storage, sessions, Sanctum/CORS'},
   {d:'2025-09-01', t:'devin', label:'Android package & base URL'},
   {d:'2025-09-02', t:'erik',  label:'Hardening & logging'},
@@ -656,7 +637,7 @@ const EVENTS = [
   {d:'2025-09-05', t:'devin', label:'Scope Kelola Produk/Toko'},
   {d:'2025-09-06', t:'devin', label:'Pencarian buyer/seller'},
   {d:'2025-09-07', t:'qa',    label:'Smoke test end-to-end'},
-
+  // Minggu 2
   {d:'2025-09-08', t:'erik',  label:'Threshold settings API'},
   {d:'2025-09-08', t:'devin', label:'Integrasi TFLite FP16'},
   {d:'2025-09-09', t:'erik',  label:'Model metadata endpoint'},
@@ -666,7 +647,7 @@ const EVENTS = [
   {d:'2025-09-12', t:'devin', label:'Draf lokal & review'},
   {d:'2025-09-13', t:'qa',    label:'Uji lapangan Android'},
   {d:'2025-09-14', t:'qa',    label:'Optimasi kamera & inferensi'},
-
+  // Minggu 3
   {d:'2025-09-15', t:'devin', label:'Offline: cache katalog'},
   {d:'2025-09-16', t:'erik',  label:'Audit trail schema'},
   {d:'2025-09-17', t:'devin', label:'Local queue transaksi'},
@@ -674,7 +655,7 @@ const EVENTS = [
   {d:'2025-09-19', t:'devin', label:'UX polish, perf list'},
   {d:'2025-09-20', t:'qa',    label:'UAT siklus 1'},
   {d:'2025-09-21', t:'qa',    label:'Bug triage P0/P1/P2'},
-
+  // Minggu 4
   {d:'2025-09-22', t:'erik',  label:'Security & performance'},
   {d:'2025-09-23', t:'devin', label:'Polish Batch Scan'},
   {d:'2025-09-24', t:'erik',  label:'Indexing DB & SOP recovery'},
@@ -701,12 +682,7 @@ const EVENTS = [
   }
 })();
 
-const colorMap = {
-  erik:'var(--brand-green)',
-  devin:'var(--brand-orange)',
-  qa:'var(--blue)',
-  milestone:'var(--violet)'
-};
+const colorMap = {erik:'var(--brand-green)',devin:'var(--brand-orange)',qa:'var(--blue)',milestone:'var(--violet)'};
 
 function buildCalendar(year, monthIdx){
   const grid = document.getElementById('cal-grid');
@@ -718,41 +694,26 @@ function buildCalendar(year, monthIdx){
     dn.textContent=n;
     grid.appendChild(dn);
   });
-
   const first = new Date(year, monthIdx, 1);
   const firstDow = (first.getDay()+6)%7; // Mon=0
   const start = new Date(year, monthIdx, 1 - firstDow);
 
   for(let i=0;i<42;i++){
-    const d = new Date(start);
-    d.setDate(start.getDate()+i);
-    const cell = document.createElement('div');
-    cell.className='cal-cell';
+    const d = new Date(start); d.setDate(start.getDate()+i);
+    const cell = document.createElement('div'); cell.className='cal-cell';
     if(d.getMonth()!==monthIdx) cell.classList.add('muted');
+    const dateStr = d.toISOString().slice(0,10); const dateNum = d.getDate();
 
-    const dateStr = d.toISOString().slice(0,10);
-    const dateNum = d.getDate();
-
-    const dateEl = document.createElement('div');
-    dateEl.className='cal-date';
-    dateEl.textContent=dateNum;
-    cell.appendChild(dateEl);
+    const dateEl = document.createElement('div'); dateEl.className='cal-date'; dateEl.textContent=dateNum; cell.appendChild(dateEl);
 
     const todays = EVENTS.filter(e=>e.d===dateStr);
     if(todays.length){
       cell.classList.add('cal-has');
-      const dots = document.createElement('div');
-      dots.className='cal-dots';
-      todays.forEach(ev=>{
-        const dot = document.createElement('span');
-        dot.style.background = colorMap[ev.t] || '#111';
-        dots.appendChild(dot);
-      });
+      const dots = document.createElement('div'); dots.className='cal-dots';
+      todays.forEach(ev=>{ const dot=document.createElement('span'); dot.style.background=colorMap[ev.t]||'#111'; dots.appendChild(dot); });
       cell.appendChild(dots);
-
-      const pop = document.createElement('div');
-      pop.className='cal-pop';
-      pop.innerHTML = todays.map(ev => {
+      const pop=document.createElement('div'); pop.className='cal-pop';
+      pop.innerHTML = todays.map(ev=>{
         const role = ev.t.charAt(0).toUpperCase()+ev.t.slice(1);
         return `<span class="badge ${ev.t}" style="background:${colorMap[ev.t]};margin-right:6px;">${role}</span> ${ev.label}`;
       }).join('<br/>');
@@ -786,7 +747,6 @@ document.getElementById('kpi').innerHTML = `
   <span class="pill milestone">Milestone: ${totals.milestone}</span>
 `;
 
-// Stacked bars (Erik + Devin) per minggu
 (function draw(){
   const svg = document.getElementById('role-svg');
   while(svg.firstChild) svg.removeChild(svg.firstChild);
@@ -803,22 +763,18 @@ document.getElementById('kpi').innerHTML = `
 
   weekly.forEach((w,i)=>{
     const y = top + i*(rowH+gap);
-
     const tl = document.createElementNS('http://www.w3.org/2000/svg','text');
     tl.setAttribute('x', left-10); tl.setAttribute('y', y+18);
     tl.setAttribute('fill', '#111827'); tl.setAttribute('font-size','12'); tl.setAttribute('text-anchor','end');
     tl.textContent = w.label; svg.appendChild(tl);
-
     const w1 = w.erik*scale;
     const r1 = document.createElementNS('http://www.w3.org/2000/svg','rect');
     r1.setAttribute('x', left); r1.setAttribute('y', y); r1.setAttribute('width', Math.max(0,w1)); r1.setAttribute('height', 20);
     r1.setAttribute('fill', 'var(--brand-green)'); r1.setAttribute('rx','6'); svg.appendChild(r1);
-
     const w2 = w.devin*scale;
     const r2 = document.createElementNS('http://www.w3.org/2000/svg','rect');
     r2.setAttribute('x', left + w1 + (w2>0?2:0)); r2.setAttribute('y', y); r2.setAttribute('width', Math.max(0,w2)); r2.setAttribute('height', 20);
     r2.setAttribute('fill', 'var(--brand-orange)'); r2.setAttribute('rx','6'); svg.appendChild(r2);
-
     const tt = document.createElementNS('http://www.w3.org/2000/svg','text');
     tt.setAttribute('x', left + Math.min(usable-50, Math.max(60, (w1+w2)/2 )) );
     tt.setAttribute('y', y+15);
@@ -827,6 +783,130 @@ document.getElementById('kpi').innerHTML = `
     svg.appendChild(tt);
   });
 })();
+
+/* ========= PERBAIKAN DATA ========= */
+const FIXES = [
+  {group:'Buyer', section:'Beranda', items:[
+    'Bug product card (bottom overflowed by 3.9 pixels)',
+    'Bug pencarian',
+    'Menambahkan tampilan ulasan pada detail produk (di bawahnya baru rekomendasi produk lain)'
+  ]},
+  {group:'Buyer', section:'Pencarian', items:[
+    'Bedakan tampilan pada menu pencarian agar tidak seperti beranda',
+    'Memaksimalkan filtering (jenis, harga, rentang presentase kelayakan, jarak)'
+  ]},
+  {group:'Buyer', section:'Keranjang', items:[
+    'Lanjutkan navigasi ke program checkout (validasi pembelian, alamat, pembayaran, kurir)',
+    'Modifikasi tampilan keranjang'
+  ]},
+  {group:'Buyer', section:'Riwayat Pembelian', items:[
+    'Integrasi konfirmasi (diproses, dikirim, selesai) by id',
+    'Saat selesai ada menu memberi ulasan dan beli lagi',
+    'Detail Riwayat pembelian dengan roadmap'
+  ]},
+  {group:'Buyer', section:'Profil Buyer', items:[
+    'Integrasikan user id di database ke tampilan profil (nama, email, no hp, dll)',
+    'Integrasikan jumlah produk di keranjang & favorit by id agar tampil kuantitas di profil',
+    'Hilangkan rating di profil',
+    'Perbaiki navigasi edit profil'
+  ]},
+
+  {group:'Seller', section:'Beranda', items:[
+    'Integrasikan pendapatan dengan seluruh produk terjual per bulan',
+    'Kuantitas pesanan realtime ke database (stok & produk by id seller)',
+    'Kesegaran (rata-rata kelayakan produk keseluruhan)',
+    'Produk terbaru (produk by id seller)'
+  ]},
+  {group:'Seller', section:'Kelola Produk', items:[
+    'Total inventori (harga x jumlah stok yang diupload)',
+    'Perbaiki filtering',
+    'Integrasi produk by id untuk dikelola',
+    'Detail produk (edit stok, nama, nutrisi, deskripsi)',
+    'Hapus produk'
+  ]},
+  {group:'Seller', section:'Scan Produk', items:[
+    'Animasi analyzing (bug & perbaiki)',
+    'Rincian dan analisis (tambah keterangan analisis)',
+    'Integrasi prediksi objek & prediksi kualitas berdasarkan persentase & label kelayakan (numerik & kategorikal)',
+    'Pada create product: perbaiki atribut “Kandungan Nutrisi” dengan enumerasi nutrisi umum (buah & sayur) + kolom “lainnya”'
+  ]},
+  {group:'Seller', section:'Riwayat Penjualan', items:[
+    'Status: Orderan, diproses, selesai, dibatalkan',
+    'Detail pesanan (konfirmasi pesanan, terima, teruskan)'
+  ]},
+  {group:'Seller', section:'Profil Seller', items:[
+    'Identitas by id seller (identitas pribadi & toko)',
+    'Integrasi identitas seller ke tampilan profil'
+  ]},
+
+  {group:'Teknis', section:'API', items:[
+    'Integrasi pembayaran gateway lokal (Midtrans)',
+    'Integrasi API mitra kurir realtime',
+    'Integrasi API Maps realtime'
+  ]},
+  {group:'Teknis', section:'Server', items:[
+    'Cloud Hosting (Hypercloud – Cloud Plus) Rp. 110.000/bulan',
+    '6 Core CPU • 10 GB RAM • SSD 50 GB • Unlimited Bandwidth • Gratis Unlimited SSL',
+    'Proteksi DDoS Maksimal • Unlimited Addon Domain • Backup Mingguan • Unlimited Email • Unlimited MySQL DB',
+    'Domain .com (Rp. 200.000) — (Server × 3 bulan) + Domain = Rp. 530.000'
+  ]},
+  {group:'Teknis', section:'Cache', items:[
+    'Update cache katalog produk 24 jam & antre transaksi (retry)',
+    'Audit trail (rekam perubahan harga/stok untuk akuntabilitas)'
+  ]},
+];
+
+/* Render perbaikan */
+const root = document.getElementById('fix-root');
+function renderFixes(filter='ALL', q=''){
+  root.innerHTML = '';
+  const text = q.trim().toLowerCase();
+  const data = FIXES.filter(f => (filter==='ALL' || f.group===filter))
+                    .map(f => ({...f, items: f.items.filter(it => it.toLowerCase().includes(text))}))
+                    .filter(f => f.items.length>0);
+
+  // KPI
+  const total = FIXES.reduce((a,f)=>a+f.items.length,0);
+  const buyer = FIXES.filter(f=>f.group==='Buyer').reduce((a,f)=>a+f.items.length,0);
+  const seller = FIXES.filter(f=>f.group==='Seller').reduce((a,f)=>a+f.items.length,0);
+  document.getElementById('kpi-total').textContent = total;
+  document.getElementById('kpi-buyer').textContent = buyer;
+  document.getElementById('kpi-seller').textContent = seller + FIXES.filter(f=>f.group==='Teknis').reduce((a,f)=>a+f.items.length,0);
+
+  data.forEach(f=>{
+    const card = document.createElement('div');
+    card.className='fix-card';
+    card.innerHTML = `
+      <div class="fix-head">
+        <div>${f.section} <small>• ${f.group}</small></div>
+        <span class="badge-cat">${f.items.length} item</span>
+      </div>
+      <div class="fix-body">
+        <ul class="fix-list">
+          ${f.items.map(it=>`<li>${it}</li>`).join('')}
+        </ul>
+      </div>
+    `;
+    root.appendChild(card);
+  });
+}
+renderFixes();
+
+/* Filter chips */
+document.querySelectorAll('.chip').forEach(ch=>{
+  ch.addEventListener('click',()=>{
+    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+    ch.classList.add('active');
+    renderFixes(ch.dataset.filter, document.getElementById('fix-search').value);
+  });
+});
+document.getElementById('fix-search').addEventListener('input', (e)=>{
+  const active = document.querySelector('.chip.active')?.dataset.filter || 'ALL';
+  renderFixes(active, e.target.value);
+});
+
+/* Biaya total */
+document.getElementById('biaya-total').textContent = 'Rp. 530.000';
 </script>
 </body>
 </html>

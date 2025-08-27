@@ -112,6 +112,30 @@ body{
 .output-box strong{color:#166534}
 @media (max-width:900px){ .task-grid{grid-template-columns:1fr} }
 
+/* ===== Team / Priorities / Risks (colored like original) ===== */
+.team-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.team-member{
+  background:linear-gradient(135deg,#f6f9fc 0%,#ffffff 100%);
+  border:1px solid #e2e8f0;border-radius:12px;padding:14px;box-shadow:0 1px 6px rgba(2,8,23,.05)
+}
+.member-name{font-size:18px;font-weight:900;color:var(--ink-2);margin-bottom:6px}
+.member-role{color:var(--brand-orange);font-size:12.5px;margin-bottom:8px;font-weight:800}
+.responsibility-list{list-style:none}
+.responsibility-list li{padding:8px 0 8px 22px;position:relative;font-size:14px;color:var(--ink-3);line-height:1.5}
+.responsibility-list li:before{content:"•";position:absolute;left:8px;color:var(--brand-green);font-weight:900}
+@media (max-width:900px){ .team-grid{grid-template-columns:1fr} }
+
+.priority-list{background:#f7fafc;padding:14px;border-radius:10px;margin-top:8px;border:1px solid #e5e7eb}
+.priority-item{display:flex;align-items:center;gap:10px;padding:10px;background:#fff;border-radius:10px;border:1px solid #e2e8f0;margin-bottom:10px;box-shadow:0 1px 4px rgba(2,8,23,.04)}
+.priority-number{width:28px;height:28px;background:var(--brand-orange);color:#fff;border-radius:999px;display:flex;align-items:center;justify-content:center;font-weight:900}
+.priority-text{flex:1;color:var(--ink-2)}
+
+.risk-grid{display:grid;gap:12px;margin-top:8px}
+.risk-item{background:#fff5f5;border-left:5px solid #fc8181;padding:12px;border-radius:8px;border:1px solid #fed7d7}
+.risk-title{font-weight:900;color:#c53030;margin-bottom:6px}
+.risk-mitigation{color:#4a5568;font-size:13px;margin-top:6px;padding-top:6px;border-top:1px dashed #fecaca}
+.risk-mitigation strong{color:#2d3748}
+
 /* ===== Calendar ===== */
 .calendar{margin-top:10px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden}
 .cal-header{display:flex;justify-content:space-between;align-items:center;background:#0f172a;color:#fff;padding:10px 12px;flex-wrap:wrap;gap:8px}
@@ -614,7 +638,6 @@ body{
       </div>
     </div>
 
-    <!-- Footer -->
     <div class="footer">
       <p><strong>E-Buyur Project</strong> — Marketplace Sayuran Segar dengan ML Classification</p>
       <p>September 2025 Development Roadmap • Version 1.0</p>
@@ -728,12 +751,11 @@ document.addEventListener('DOMContentLoaded', () => {
 /* Logo fallback if not found */
 document.querySelectorAll('.logo-img').forEach(img=>{
   img.addEventListener('error', function(){
-    if(this.src.includes('logo-ebuyur.png')){ // fallback terakhir SVG
+    if(this.src.includes('logo-ebuyur.png')){
       const svg = encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='340' height='90'><rect width='100%' height='100%' fill='black'/><text x='50%' y='55%' fill='white' font-size='28' font-family='Inter' text-anchor='middle' font-weight='800'>E-BUYUR MARKET</text></svg>`);
-      this.src = 'data:image/svg+xml;charset=UTF-8,'+svg;
-      return;
+      this.src = 'data:image/svg+xml;charset=UTF-8,'+svg; return;
     }
-    this.src = 'logo-ebuyur.png'; // fallback kedua (nama lama)
+    this.src = 'logo-ebuyur.png';
   }, {once:true});
 });
 
@@ -750,7 +772,6 @@ document.querySelectorAll('.tab-btn').forEach(btn=>{
 
 /* ========= ROADMAP DATA ========= */
 const EVENTS = [
-  // Minggu 1
   {d:'2025-09-01', t:'erik',  label:'Storage, sessions, Sanctum/CORS'},
   {d:'2025-09-01', t:'devin', label:'Android package & base URL'},
   {d:'2025-09-02', t:'erik',  label:'Hardening & logging'},
@@ -763,7 +784,6 @@ const EVENTS = [
   {d:'2025-09-05', t:'devin', label:'Scope Kelola Produk/Toko'},
   {d:'2025-09-06', t:'devin', label:'Pencarian buyer/seller'},
   {d:'2025-09-07', t:'qa',    label:'Smoke test end-to-end'},
-  // Minggu 2
   {d:'2025-09-08', t:'erik',  label:'Threshold settings API'},
   {d:'2025-09-08', t:'devin', label:'Integrasi TFLite FP16'},
   {d:'2025-09-09', t:'erik',  label:'Model metadata endpoint'},
@@ -773,7 +793,6 @@ const EVENTS = [
   {d:'2025-09-12', t:'devin', label:'Draf lokal & review'},
   {d:'2025-09-13', t:'qa',    label:'Uji lapangan Android'},
   {d:'2025-09-14', t:'qa',    label:'Optimasi kamera & inferensi'},
-  // Minggu 3
   {d:'2025-09-15', t:'devin', label:'Offline: cache katalog'},
   {d:'2025-09-16', t:'erik',  label:'Audit trail schema'},
   {d:'2025-09-17', t:'devin', label:'Local queue transaksi'},
@@ -781,7 +800,6 @@ const EVENTS = [
   {d:'2025-09-19', t:'devin', label:'UX polish, perf list'},
   {d:'2025-09-20', t:'qa',    label:'UAT siklus 1 (buyer/seller)'},
   {d:'2025-09-21', t:'qa',    label:'Bug triage P0/P1/P2'},
-  // Minggu 4
   {d:'2025-09-22', t:'erik',  label:'Security & performance'},
   {d:'2025-09-23', t:'devin', label:'Polish Batch Scan'},
   {d:'2025-09-24', t:'erik',  label:'Indexing DB & SOP recovery'},
@@ -793,14 +811,14 @@ const EVENTS = [
   {d:'2025-09-30', t:'milestone', label:'Rehearsal & perbaikan P0'},
 ];
 
-/* Pastikan ada Erik setiap hari (lead) */
+/* Erik hadir setiap hari (lead) */
 (function enforceErikLead(){
   const start = new Date('2025-09-01'), end = new Date('2025-09-30');
   for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
     const ds = d.toISOString().slice(0,10);
-    const today = EVENTS.filter(e=>e.d===ds);
-    if(!today.length) EVENTS.push({d:ds,t:'erik',label:'Leadership oversight'});
-    else if(!today.some(e=>e.t==='erik')) EVENTS.push({d:ds,t:'erik',label:'Lead review & unblock'});
+    const todays = EVENTS.filter(e=>e.d===ds);
+    if(!todays.length) EVENTS.push({d:ds,t:'erik',label:'Leadership oversight'});
+    else if(!todays.some(e=>e.t==='erik')) EVENTS.push({d:ds,t:'erik',label:'Lead review & unblock'});
   }
 })();
 
@@ -955,25 +973,22 @@ const FIXES = [
   ]},
 ];
 
-/* Kalender Perbaikan: generate event sepanjang September
-   — Erik tampil tiap hari (lead) dan mendapatkan porsi > Devin.
-   — Teknis & Seller default Erik; Buyer default Devin + oversight Erik. */
+/* Kalender Perbaikan: tugas Devin = 20, sisanya Erik; oversight Erik harian tetap ada */
 const FIX_EVENTS_ALL = (() => {
   const queue = [];
   FIXES.forEach(f => f.items.forEach(txt => {
-    let primary = 'erik';
-    if(f.group==='Buyer') primary = 'devin';
-    if(f.group==='Seller' || f.group==='Teknis') primary = 'erik';
-    queue.push({group:f.group, section:f.section, text:txt, primary});
+    queue.push({group:f.group, section:f.section, text:txt});
   }));
+  // alokasikan peran: first 20 -> Devin, sisanya Erik
+  const assigned = queue.map((it, i) => ({...it, primary: (i<20 ? 'devin' : 'erik')}));
   const start = new Date('2025-09-01'), end = new Date('2025-09-30');
   const evs = [];
   let idx = 0;
   for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
     const ds = d.toISOString().slice(0,10);
-    // 3 item/hari (maks) agar terbaca
-    for(let k=0;k<3 && idx<queue.length;k++,idx++){
-      const it = queue[idx];
+    // max 3 item/hari agar terbaca
+    for(let k=0;k<3 && idx<assigned.length;k++,idx++){
+      const it = assigned[idx];
       evs.push({d:ds, t:it.primary, label:`${it.group} • ${it.section}: ${it.text}`, group:it.group});
     }
     // oversight Erik setiap hari
@@ -1006,7 +1021,11 @@ function refreshFixCalendarAndChart(){
     evs.forEach(e=>{ if(within(e.d,w.start,w.end) && (e.t==='erik'||e.t==='devin')) roles[e.t]++; });
     return {label:w.label, ...roles};
   });
-  const totals = weekly.reduce((a,w)=>({erik:a.erik+w.erik,devin:a.devin+w.devin}),{erik:0,devin:0});
+
+  // KPI total (hanya hitung tugas, tidak termasuk oversight)
+  const totals = FIX_EVENTS_ALL
+    .filter(e=>e.group!=='Oversight')
+    .reduce((a,e)=>{ a[e.t] = (a[e.t]||0)+1; return a; }, {erik:0,devin:0});
   document.getElementById('fix-kpi-roles').innerHTML = `
     <span class="pill erik">Erik: ${totals.erik}</span>
     <span class="pill devin">Devin: ${totals.devin}</span>`;
@@ -1017,7 +1036,6 @@ function refreshFixCalendarAndChart(){
 const root = document.getElementById('fix-root');
 function renderFixList(){
   root.innerHTML = '';
-  // KPI angka
   const total = FIXES.reduce((a,f)=>a+f.items.length,0);
   const buyer = FIXES.filter(f=>f.group==='Buyer').reduce((a,f)=>a+f.items.length,0);
   const sellerTeknis = FIXES.filter(f=>f.group==='Seller' || f.group==='Teknis').reduce((a,f)=>a+f.items.length,0);
@@ -1025,7 +1043,6 @@ function renderFixList(){
   document.getElementById('kpi-buyer').textContent = buyer;
   document.getElementById('kpi-seller').textContent = sellerTeknis;
 
-  // Filter list sesuai chips + search
   const text = fixCalFilter.q.trim().toLowerCase();
   const data = FIXES
     .filter(f => fixCalFilter.cat==='ALL' || f.group===fixCalFilter.cat)

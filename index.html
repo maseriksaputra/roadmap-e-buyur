@@ -973,29 +973,52 @@ const FIXES = [
   ]},
 ];
 
-/* Kalender Perbaikan: tugas Devin = 20, sisanya Erik; oversight Erik harian tetap ada */
+/* Kalender Perbaikan: Devin = 20 item, Erik = 50 item (non-oversight) */
 const FIX_EVENTS_ALL = (() => {
+  // 1) Flatten semua item perbaikan
   const queue = [];
-  FIXES.forEach(f => f.items.forEach(txt => {
-    queue.push({group:f.group, section:f.section, text:txt});
-  }));
-  // alokasikan peran: first 20 -> Devin, sisanya Erik
-  const assigned = queue.map((it, i) => ({...it, primary: (i<20 ? 'devin' : 'erik')}));
+  FIXES.forEach(f => f.items.forEach(txt => queue.push({ group:f.group, section:f.section, text:txt })));
+
+  const DEVIN_TARGET = 20;
+  const ERIK_TARGET  = 50;
+
+  // 2) Alokasikan awal: 20 pertama -> Devin, sisanya -> Erik
+  const assigned = queue.map((it, i) => ({ ...it, primary: (i < DEVIN_TARGET ? 'devin' : 'erik') }));
+
+  // 3) Top-up Erik sampai tepat 50 (kloning item Erik dengan label "lanjutan" bila kurang)
+  let erikCount = assigned.filter(a => a.primary === 'erik').length;
+  if (erikCount < ERIK_TARGET) {
+    const erikPool = assigned.filter(a => a.primary === 'erik');
+    let j = 0;
+    while (erikCount < ERIK_TARGET && erikPool.length) {
+      const base = erikPool[j % erikPool.length];
+      assigned.push({ ...base, text: base.text + ' (lanjutan)' });
+      erikCount++; j++;
+    }
+  } else if (erikCount > ERIK_TARGET) {
+    // (opsional) batasi jika kebetulan lebih dari 50
+    let over = erikCount - ERIK_TARGET;
+    for (let i = assigned.length - 1; i >= 0 && over > 0; i--) {
+      if (assigned[i].primary === 'erik') { assigned.splice(i, 1); over--; }
+    }
+  }
+
+  // 4) Jadwalkan ke September (maks 3 item/hari) + oversight Erik harian
   const start = new Date('2025-09-01'), end = new Date('2025-09-30');
   const evs = [];
   let idx = 0;
-  for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)){
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
     const ds = d.toISOString().slice(0,10);
-    // max 3 item/hari agar terbaca
-    for(let k=0;k<3 && idx<assigned.length;k++,idx++){
+    for (let k = 0; k < 3 && idx < assigned.length; k++, idx++) {
       const it = assigned[idx];
-      evs.push({d:ds, t:it.primary, label:`${it.group} • ${it.section}: ${it.text}`, group:it.group});
+      evs.push({ d: ds, t: it.primary, label: `${it.group} • ${it.section}: ${it.text}`, group: it.group });
     }
-    // oversight Erik setiap hari
-    evs.push({d:ds, t:'erik', label:'Lead oversight (perbaikan)', group:'Oversight'});
+    // Oversight Erik (tidak dihitung KPI non-oversight)
+    evs.push({ d: ds, t: 'erik', label: 'Lead oversight (perbaikan)', group: 'Oversight' });
   }
   return evs;
 })();
+
 
 /* Helpers shared with Perbaikan */
 const fixCalFilter = {cat:'ALL', q:''};
